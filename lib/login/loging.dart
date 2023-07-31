@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getapiexamplle/profile/profilepage.dart';
+import '../api/apiserviice.dart';
 
 class LogingPage extends StatefulWidget {
   const LogingPage({super.key});
@@ -37,7 +38,7 @@ class _LogingPageState extends State<LogingPage> {
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
@@ -46,7 +47,7 @@ class _LogingPageState extends State<LogingPage> {
                     keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                         // suffixIcon: suffixIcon,
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: const Icon(Icons.person),
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
@@ -64,7 +65,6 @@ class _LogingPageState extends State<LogingPage> {
                       } else if (RegExp("kminchelle").hasMatch(value) != true) {
                         return 'enter valid Username';
                       }
-              
                     },
                   ),
                 ),
@@ -78,7 +78,7 @@ class _LogingPageState extends State<LogingPage> {
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                           // suffixIcon: suffixIcon,
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
                           ),
@@ -100,16 +100,25 @@ class _LogingPageState extends State<LogingPage> {
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (formkey.currentState!.validate()) {
-                      Navigator.pushAndRemoveUntil<dynamic>(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (context) => ProfilePage(),
-                        ),
-                        (route) =>
-                            false, //if you want to disable back feature set to false
-                      );
+                      var alldata = await loginapi(
+                          _usernameController.text.toString(),
+                          _passwordController.text.toString());
+
+                      if (alldata != null) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushAndRemoveUntil<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (context) => ProfilePage(
+                              profilelist: alldata,
+                            ),
+                          ),
+                          (route) =>
+                              false, //if you want to disable back feature set to false
+                        );
+                      }
                     }
                   },
                   child: Container(

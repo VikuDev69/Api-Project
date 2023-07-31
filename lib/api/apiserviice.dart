@@ -32,7 +32,10 @@ Future<List> getImage() async {
   }
 }
 
-Future<void> loginapi(username, password) async {
+Future<List> loginapi(
+  username,
+  password,
+) async {
   try {
     var response = await dio.post('https://dummyjson.com/auth/login',
         data: {'username': username, 'password': password});
@@ -41,8 +44,9 @@ Future<void> loginapi(username, password) async {
     var datalist = [];
     datalist.add(data);
     print(datalist);
-
+    return datalist;
   } catch (e) {
     print(e);
+    throw Exception();
   }
 }
